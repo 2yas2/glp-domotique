@@ -15,13 +15,30 @@ Projet de Génie Logiciel (GLP) réalisé en L2 Informatique à CY Cergy Paris U
 
 Les jars ne sont pas dans le dépôt : télécharger `log4j-1.2.17.jar` (et JUnit avec hamcrest pour les tests) et les mettre dans un dossier `lib/` à la racine. Les instructions détaillées pour Eclipse sont dans `readme.txt`.
 
-Pour lancer la simulation : exécuter `src/test/TestGame.java` ou `src/gui/LanceurGUI.java`. Les constantes de la simulation (vitesse, taille des blocs, jours simulés) sont dans `src/config/SimulationConfiguration.java`. Les tests sont dans `src/tests/`.
+Pour lancer la simulation depuis Eclipse : exécuter `src/test/TestGame.java` ou `src/gui/LanceurGUI.java`.
+
+En ligne de commande, depuis la racine du projet :
+
+```
+javac -encoding UTF-8 -cp lib/log4j-1.2.17.jar -sourcepath src -d out src/test/TestGame.java
+java -cp "out;src;lib/log4j-1.2.17.jar" test.TestGame
+```
+
+Sous Linux ou macOS, remplacer `;` par `:` dans le classpath. Le dossier `src` doit être dans le classpath, sinon les sprites ne sont pas trouvés.
+
+Les constantes de la simulation (vitesse, taille des blocs, jours simulés) sont dans `src/config/SimulationConfiguration.java`. Les tests sont dans `src/tests/`.
 
 Le rapport du projet est dans `Rapport_Domotique.pdf` (sources LaTeX dans `doc/`).
 
 ## Captures d'écran
 
-[À COMPLÉTER]
+Menu :
+
+![menu](captures/menu.png)
+
+Simulation en cours :
+
+![simulation](captures/simulation.png)
 
 ## Ce que j'ai fait
 
