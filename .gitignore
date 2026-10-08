@@ -1,0 +1,17 @@
+# compilation
+out/
+*.class
+
+# bibliotheques a telecharger (voir readme.txt)
+*.jar
+
+# ide
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# logs generes au lancement
+src/log/*.html
+src/log/*.txt
