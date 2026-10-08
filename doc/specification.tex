@@ -1,0 +1,306 @@
+\newpage
+\section{Spécification du projet}
+\label{sec:cdc}
+
+\paragraph{} Nous avons présenté l'objectif du projet dans la section \ref{sec:intro}. 
+Dans cette section, nous présentons la spécification complète de notre logiciel, correspondant 
+au cahier des charges établi en début de projet. Nous y détaillons les notions fondamentales, 
+les contraintes techniques, la modélisation de l'environnement, ainsi que l'ensemble des 
+fonctionnalités attendues du système domotique intelligent.
+
+% -----------------------------------------------------------------------
+\subsection{Notions de base et contraintes du projet}
+\label{sec:spec1}
+
+\subsubsection{Fonctionnement général du logiciel}
+
+Le logiciel simule une maison intelligente en vue verticale 2D, composée de plusieurs pièces 
+(salon, chambre, cuisine, salle de bain) reliées par un couloir central. Un agent autonome, 
+appelé \textit{Maître de maison}, évolue dans cet environnement selon une routine journalière 
+prédéfinie. Le système domotique analyse en continu l'état du maître — ses besoins 
+physiologiques et son humeur — afin de déclencher automatiquement des actions adaptées sur 
+les équipements connectés de l'habitat.
+
+\paragraph{} La simulation se déroule en temps accéléré et configurable : une journée complète 
+de 24 heures simulées correspond à 24 minutes réelles, soit un rapport de 1 minute réelle pour 
+1 heure simulée. Ce mode de fonctionnement permet d'observer l'ensemble du comportement du 
+système sur une journée complète dans un laps de temps réduit, tout en conservant la cohérence 
+temporelle des événements simulés.
+
+\paragraph{} L'architecture logicielle repose sur une séparation claire des responsabilités : 
+un moteur de simulation gère la logique métier (déplacements, besoins physiologiques, 
+déclenchement des actions), une couche graphique assure l'affichage de l'environnement et 
+de l'état du maître, et un module de configuration centralise les paramètres globaux de la 
+simulation. Cette organisation en couches facilite la maintenabilité du code et l'évolution 
+future du projet.
+
+\subsubsection{Notions et terminologies de base}
+
+\paragraph{Domotique} La domotique rassemble l'ensemble des techniques permettant de 
+contrôler, programmer et automatiser une habitation. Elle regroupe les domaines de 
+l'électronique, de l'informatique, de la télécommunication et des automatismes. Le terme 
+est issu du latin \textit{domus} (domicile) et du suffixe \textit{-tique} (technique). Dans 
+le cadre de ce projet, la domotique est simulée logiciellement : les équipements physiques 
+sont remplacés par des objets Java dont l'état est géré et affiché en temps réel.
+
+\paragraph{Maître de maison} Il s'agit de l'utilisateur principal du système domotique, 
+pour lequel le système s'adapte et se personnalise. Il possède un profil complet incluant 
+son état d'humeur ainsi que ses besoins physiologiques : faim, soif, fatigue et hygiène. 
+Chacun de ces paramètres est modélisé par une barre de jauge évoluant de 0 à 100\%, dont 
+la valeur influence directement les décisions du système. Un seul maître de maison est 
+géré dans cette simulation.
+
+\paragraph{État d'humeur} L'humeur représente l'état émotionnel du maître à un instant 
+donné. Elle est définie aléatoirement au début de la simulation, c'est-à-dire au réveil 
+du maître, et évolue dynamiquement en fonction des besoins physiologiques, de l'état de 
+santé et des imprévus survenus au cours de la journée. Un état d'humeur négatif est 
+engendré par une dégradation des paramètres physiologiques, tandis qu'une stabilité de 
+ceux-ci favorise une humeur positive. Les quatre états d'humeur possibles sont présentés 
+dans le tableau \ref{tab:humeurs}.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{3cm}|p{9cm}|}
+\hline
+\textbf{État d'humeur} & \textbf{Description et influence sur le système} \\
+\hline
+Joyeux & État positif. Le système favorise les activités conviviales et les repas 
+colorés. L'ambiance lumineuse est vive et chaleureuse. \\
+\hline
+Triste & État négatif. Le système propose des activités réconfortantes, 
+des plats doux et une ambiance apaisante. \\
+\hline
+En colère & État négatif. Le système limite les stimulations extérieures, 
+propose des repas consistants et une musique calme. \\
+\hline
+Neutre & État stable. Le système propose de la nouveauté et de la variété 
+pour stimuler la curiosité du maître. \\
+\hline
+\end{tabular}
+\caption{États d'humeur du maître de maison et influence sur le système}
+\label{tab:humeurs}
+\end{table}
+
+\paragraph{Besoins physiologiques} Les besoins du maître de maison sont modélisés sous 
+forme de barres de jauge évoluant continuellement au cours de la simulation. Chacune 
+évolue selon un taux horaire défini, comme présenté dans le tableau \ref{tab:besoins}.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{3cm}|p{4cm}|p{5cm}|}
+\hline
+\textbf{Besoin} & \textbf{Taux de diminution} & \textbf{Condition de remontée} \\
+\hline
+Faim & $-7\%$ par heure simulée & Après un repas \\
+\hline
+Soif & $-15\%$ par heure simulée & Après hydratation \\
+\hline
+Énergie & $-5$ à $-20\%$ par heure selon l'activité & Durant le sommeil \\
+\hline
+Hygiène & $-3\%$ par heure simulée & Après une douche ou un bain \\
+\hline
+\end{tabular}
+\caption{Évolution des besoins physiologiques du maître de maison}
+\label{tab:besoins}
+\end{table}
+
+\paragraph{Objets connectés} Plusieurs équipements domotiques sont simulés dans la maison. 
+Chaque objet possède un état actif ou inactif géré automatiquement par le système :
+\begin{itemize}
+    \item \textbf{Éclairage} : les lumières de chaque pièce peuvent être allumées ou 
+    éteintes automatiquement. Leur intensité (forte ou faible) ainsi que leur couleur 
+    (LED colorées) sont également gérées en fonction de l'humeur et de l'heure.
+    \item \textbf{Chauffage} : la maison régule automatiquement la température intérieure 
+    afin de maintenir un confort ambiant, ou de l'adapter à l'humeur du maître.
+    \item \textbf{Volets} : leur ouverture et fermeture sont automatisées selon la météo 
+    ou l'horaire de la journée.
+    \item \textbf{Enceinte connectée} : l'ambiance sonore est gérée selon plusieurs 
+    modes : calme, dynamique ou relaxant, selon le contexte émotionnel du maître.
+\end{itemize}
+
+\paragraph{Routine journalière} Le maître de maison suit une routine prédéfinie qui varie 
+selon le type de journée. Les tableaux \ref{tab:semaine} et \ref{tab:weekend} présentent 
+respectivement le déroulement d'une journée de semaine et d'une journée de weekend.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{2.5cm}|p{9.5cm}|}
+\hline
+\textbf{Horaire} & \textbf{Activité} \\
+\hline
+07:00 & Réveil — ouverture automatique des fenêtres. Barre de fatigue au maximum, 
+barre d'hygiène basse. Le système propose une douche. \\
+\hline
+07:05 & Douche (20 min) — barre d'hygiène au maximum. Barre de faim basse. 
+Le système propose un petit-déjeuner. \\
+\hline
+07:25 & Petit-déjeuner — barre de faim au maximum. \\
+\hline
+07:40 & Départ au travail — la porte de sortie s'ouvre. \\
+\hline
+18:40 & Retour à domicile — humeur basse. Le système propose une douche, 
+un repas, une boisson et une activité relaxante. \\
+\hline
+20:00 & Dîner. \\
+\hline
+22:00 & Coucher — fin de journée. \\
+\hline
+\end{tabular}
+\caption{Routine journalière en semaine}
+\label{tab:semaine}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{2.5cm}|p{9.5cm}|}
+\hline
+\textbf{Horaire} & \textbf{Activité} \\
+\hline
+10:00 & Réveil tardif — proposition de douche. \\
+\hline
+10:30 & Petit-déjeuner. \\
+\hline
+11:00 & Travail à domicile dans le bureau. \\
+\hline
+14:00 & Déjeuner. \\
+\hline
+14:30--15:30 & Sieste — légère hausse de la barre d'énergie. \\
+\hline
+16:00--18:00 & Sortie extérieure — diminution des barres de fatigue, d'hygiène 
+et d'humeur. \\
+\hline
+18:00 & Retour — activité relaxante proposée par le système. \\
+\hline
+21:00 & Dîner puis coucher à 22:00. \\
+\hline
+\end{tabular}
+\caption{Routine journalière le weekend}
+\label{tab:weekend}
+\end{table}
+
+\paragraph{Imprévus} Des événements non planifiés peuvent survenir au cours de la journée 
+et perturber la routine normale du maître. Le système doit détecter ces situations et 
+réagir de manière adaptée. Les imprévus pris en compte dans la simulation sont les suivants :
+\begin{itemize}
+    \item \textbf{Réveil en retard} : entraîne le décalage de l'ensemble des activités 
+    matinales et une dégradation plus rapide des besoins physiologiques.
+    \item \textbf{Message téléphonique urgent} : sollicitation professionnelle imprévue 
+    en dehors des horaires habituels, nécessitant une réorganisation des priorités.
+    \item \textbf{Retour tardif du travail} : décalage du dîner, annulation ou report 
+    des activités du soir.
+\end{itemize}
+Chaque imprévu influence négativement l'humeur du maître et modifie dynamiquement 
+les priorités d'action du système.
+
+\subsubsection{Contraintes et limitations connues}
+
+\paragraph{}
+
+\paragraph{} :
+
+
+\paragraph{} Outils de développement utilisés :
+\begin{enumerate}
+    \item Langage de programmation : Java
+    \item Environnement de développement : Eclipse
+    \item Outil de rédaction du rapport : LATEX
+\end{enumerate}
+
+% -----------------------------------------------------------------------
+\subsection{Fonctionnalités attendues du projet}
+\label{sec:spec2}
+
+\paragraph{} Cette sous-section présente l'ensemble des fonctionnalités que le système 
+domotique doit implémenter. Celles-ci sont regroupées en deux catégories : les 
+fonctionnalités générales de simulation, et les actions automatiques déclenchées en 
+fonction de l'état du maître.
+
+\paragraph{Fonctionnalités générales} Le système domotique doit assurer les 
+fonctionnalités suivantes :
+\begin{itemize}
+    \item Modéliser graphiquement un appartement en 2D composé de plusieurs pièces 
+    distinctes, d'un couloir central et d'une sortie.
+    \item Simuler le déplacement autonome du maître de maison dans l'appartement, 
+    en respectant les contraintes physiques telles que les murs, les portes et les 
+    bordures de la carte.
+    \item Gérer en continu l'évolution des besoins physiologiques du maître selon 
+    les taux horaires définis dans le tableau \ref{tab:besoins}.
+    \item Calculer dynamiquement l'état d'humeur du maître à partir de ses paramètres 
+    physiologiques et des événements survenus.
+    \item Gérer la routine journalière du maître selon le type de journée (semaine 
+    ou weekend), en déclenchant les activités aux horaires prévus.
+    \item Détecter et gérer les imprévus en notifiant le maître et en réorganisant 
+    les priorités du système en conséquence.
+    \item Permettre à l'utilisateur de mettre en pause, reprendre ou accélérer 
+    la simulation via l'interface graphique.
+    \item Afficher en temps réel l'état du maître (barres de besoins, humeur, 
+    heure simulée) ainsi que l'état des équipements connectés.
+\end{itemize}
+
+\paragraph{Actions automatiques selon l'état du maître} Le système surveille en 
+permanence l'état du maître et déclenche des actions spécifiques dès qu'un seuil 
+prédéfini est atteint. L'ensemble de ces déclencheurs et de leurs effets est 
+récapitulé dans le tableau \ref{tab:actions}.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{5cm}|}
+\hline
+\textbf{Condition déclenchante} & \textbf{Action du système} & \textbf{Effet} \\
+\hline
+Barre de faim $<$ 40\% aux heures de repas & Proposition d'un repas adapté 
+à l'humeur & Remplissement de la barre de faim, légère hausse de l'humeur \\
+\hline
+Barre de soif $<$ 50\% & Proposition d'une boisson adaptée à l'humeur & 
+Remplissement de la barre de soif \\
+\hline
+Barre d'énergie $<$ 20\% ou heure $>$ 22h30 & Activation du mode nuit 
+(lumières tamisées, volets fermés, musique douce) & Remplissement de 
+la barre de sommeil \\
+\hline
+Niveau d'hygiène $<$ 20\% & Proposition d'un bain immédiat & Hausse 
+du niveau d'hygiène et effet positif sur l'humeur \\
+\hline
+Humeur négative (tristesse ou colère) & Ajustement de l'ambiance intérieure 
+(éclairage, température, musique) & Retour progressif à un état 
+émotionnel stable \\
+\hline
+Survenue d'un imprévu & Notification du maître et réorganisation 
+des priorités & Limitation de l'impact sur le confort et le bien-être \\
+\hline
+\end{tabular}
+\caption{Actions automatiques du système selon l'état du maître}
+\label{tab:actions}
+\end{table}
+
+\paragraph{} Comme illustré dans le tableau \ref{tab:actions}, les actions du système 
+sont hiérarchisées selon un ordre de priorité strict. Les besoins vitaux faim, soif 
+et santé  sont toujours traités en premier, suivis du sommeil, de l'hygiène, du 
+bien-être émotionnel, et enfin des activités de loisir. Cette organisation garantit 
+une simulation cohérente, réaliste et centrée sur le bien-être du maître de maison.
+
+\paragraph{Adaptation des repas selon l'humeur} Le système ne se contente pas de 
+proposer un repas lorsque la barre de faim est basse : il adapte également le type 
+de repas à l'état émotionnel du maître. Ainsi :
+\begin{itemize}
+    \item \textbf{Joyeux} : repas coloré et convivial (pizza, tacos, burgers).
+    \item \textbf{Triste} : plat réconfortant à texture douce (purée, lasagnes, 
+    hachis parmentier), avec éventuellement un dessert sucré si l'humeur est 
+    particulièrement basse.
+    \item \textbf{En colère} : plat consistant et épicé (kebab, steak, wrap).
+    \item \textbf{Neutre} : cuisine du monde pour stimuler la curiosité 
+    (mexicain, libanais, asiatique).
+\end{itemize}
+
+\paragraph{Adaptation des boissons selon l'humeur} De la même manière, le choix de 
+la boisson proposée est conditionné par l'état émotionnel du maître :
+\begin{itemize}
+    \item \textbf{Humeur stimulante (joyeux, en colère)} : boisson rafraîchissante 
+    et pétillante (soda, eau aromatisée, smoothie aux fruits).
+    \item \textbf{Humeur basse (triste, neutre)} : boisson réconfortante et 
+    énergisante (thé vert, thé noir, smoothie exotique).
+\end{itemize}
+
+\paragraph{} L'ensemble de ces fonctionnalités constitue le cœur du système domotique 
+intelligent et adaptatif développé dans ce projet. Leur implémentation repose sur 
+une architecture orientée objet rigoureuse, détaillée dans la section suivante.

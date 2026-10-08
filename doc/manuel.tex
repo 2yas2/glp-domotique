@@ -1,0 +1,44 @@
+\newpage
+\section{Manuel utilisateur}
+\label{sec:manuel}
+
+Dans la figure \ref{fig:graphique} ci dessous, on peut voir l'ihm graphique et tout ses composantes qu'on décrira ci bas: 
+
+\subsection{Lancement de l'application}
+
+L'application se lance en exécutant la classe \texttt{TestGame} (paquetage \texttt{test}). Cette classe ouvre la fenêtre d'accueil intitulée \og Simulation Domotique \fg. Trois boutons sont alors proposés :
+\begin{itemize}
+\item \textit{Play} : démarre la simulation et ouvre la fenêtre principale.
+\item \textit{Crédits} : ouvre une fenêtre listant les auteurs du projet.
+\item \textit{Quitter} : ferme l'application.
+\end{itemize}
+
+\subsection{Fenêtre de simulation}
+
+Une fois la simulation lancée, la fenêtre principale est composée :
+\begin{itemize}
+\item D'une zone centrale qui affiche la maison vue de dessus, avec ses pièces, ses meubles, ses lumières et le maître qui s'y déplace.
+\item D'un bandeau latéral droit qui regroupe l'horloge, l'indicateur de vitesse, la barre d'état des besoins, l'état des meubles et les boutons de contrôle.
+\item D'un bandeau inférieur à onglets : l'onglet \textit{Routine} indique le type de jour, l'imprévu éventuel, l'étape courante et la prochaine étape ; l'onglet \textit{Consignes} affiche les notifications horodatées de la maison.
+\end{itemize}
+
+\subsection{Contrôles disponibles}
+
+Trois boutons sont mis à disposition de l'utilisateur dans la carte \textit{Contrôles} :
+\begin{itemize}
+\item \textit{Start / Pause} : démarre la simulation ou la met en pause. Au premier clic, un fil de simulation est lancé. Un nouveau clic met le fil en pause.
+\item \textit{Clear} : remet la simulation dans son état initial (heure, position du maître, besoins, routine), sans fermer la fenêtre.
+\item \textit{Speed Up} : multiplie la vitesse de simulation par un facteur (1, 2 ou 3) et boucle. La carte \textit{Actual Speed} affiche en permanence le multiplicateur courant.
+\end{itemize}
+
+\subsection{Lecture des informations affichées}
+
+\paragraph{Horloge} La carte \textit{Heure} affiche le temps interne de la simulation au format \texttt{HH:MM}. La simulation démarre par défaut à 07:30 du jour 0.
+
+\paragraph{Barre d'état} Quatre jauges représentent les besoins du maître (énergie, faim, soif, hygiène). Chaque valeur diminue régulièrement et passe en zone critique en dessous de 20. L'humeur globale est également affichée sous forme d'étiquette (\textit{Very unhappy}, \textit{Uneasy}, \textit{Neutral}, \textit{Happy}, \textit{Excellent}).
+
+\paragraph{État des meubles} La carte \textit{État des objets} liste les meubles de la maison avec leur état courant (en veille / actif). Pour le four, le plat en cours de cuisson est précisé ; pour la télévision, l'émission diffusée.
+
+\paragraph{Routine et notifications} L'onglet \textit{Routine} permet de suivre la progression du maître dans sa journée. L'onglet \textit{Consignes} accumule les messages textuels que la maison adresse à son occupant (par exemple : \og Le maître doit dormir \fg, \og Imprévu du jour : Coupure de courant \fg).
+
+\fig{images/ihm_graphique.png}{15cm}{12cm}{Capture de l'IHM Graphique du logiciel}{graphique}

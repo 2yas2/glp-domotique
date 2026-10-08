@@ -1,0 +1,68 @@
+\newpage
+\section{Déroulement du projet}
+\label{sec:equipe}
+
+Dans cette section, nous décrivons comment le projet a été réalisé en équipe : la répartition des tâches, la synchronisation du travail en membres de l'équipe, etc.
+
+\subsection{Réalisation du projet par étapes}
+
+Le projet a été conduit selon un découpage en étapes successives, en s'inspirant d'un cycle de développement incrémental.
+
+\paragraph{Étape 1 — Analyse et cahier des charges} Étude du sujet, rédaction du cahier des charges, identification des grandes entités (maison, pièces, meubles, maître, besoins, routine) et premières maquettes papier de l'interface.
+
+\paragraph{Étape 2 — Squelette du moteur} Mise en place du paquetage \texttt{config}, de la classe \texttt{Map}, des classes \texttt{Room} et de leurs filles, ainsi que des classes de meubles. Création du \texttt{GameBuilder} pour assembler la carte et les meubles.
+
+\paragraph{Étape 3 — État du maître et horloge} Implémentation des quatre besoins (\texttt{Energy}, \texttt{Hunger}, \texttt{Thirst}, \texttt{Hygiene}), de \texttt{MasterState} (humeur, besoin critique) et de \texttt{SimulationClock}.
+
+\paragraph{Étape 4 — Routine et imprévus} Conception des classes \texttt{RoutineStep}, \texttt{RoutinePlan} et \texttt{RoutineManager}, avec deux modèles (semaine et week-end). Ajout du \texttt{ImprevuManager} et des cinq imprévus (\textit{Grasse matinée}, \textit{Visite surprise}, \textit{Coupure de courant}, \textit{Journée malade}, \textit{Journée pressée}).
+
+\paragraph{Étape 5 — Décision et navigation} Mise en place du pipeline de décision (\texttt{DecisionMaker} avec trois \texttt{DecisionStrategy}) et du \texttt{MasterNavigationService}.
+
+\paragraph{Étape 6 — Sélecteurs d'humeur et services} Ajout des sélecteurs (\texttt{MoodFoodSelector}, \texttt{MoodShowSelector}) et du \texttt{FurnitureInteractionService} basé sur le patron \textit{Visitor}.
+
+\paragraph{Étape 7 — Interface graphique} Conception du \texttt{LauncherGUI}, du \texttt{MainGUI} et de tous les panneaux (\texttt{GameDisplay}, \texttt{StatsPanel}, \texttt{FurnitureStatusPanel}, etc.).
+
+\paragraph{Étape 8 — Tests et qualité} Rédaction de la suite de tests \texttt{DomotiqueTestSuite}, qui regroupe une vingtaine de classes de tests \texttt{JUnit} couvrant les besoins, l'horloge, la routine, les imprévus, les sélecteurs, les meubles, la navigation et l'intégration via le \texttt{MobileElementManager}.
+
+\paragraph{Étape 9 — Rédaction du rapport} Mise en forme du rapport en \LaTeX, intégration des schémas et relectures.
+
+\subsection{Répartition des tâches, communication et intégration}
+
+\section{Répartition des tâches, communication et intégration}
+
+\subsection{Répartition des tâches}
+
+Le projet a été divisé en plusieurs grands domaines fonctionnels, chacun confié à un ou plusieurs membres de l'équipe selon leurs affinités et compétences.
+
+\begin{itemize}
+    \item \textbf{Gestion des besoins et système de décision}~: développement des états du personnage (énergie, faim, soif, hygiène), mise en place du système de routine et implémentation du mécanisme de priorisation entre besoins critiques et routine.
+    \item \textbf{Interface graphique et rendu visuel}~: conception de la fenêtre principale, réalisation des panneaux d'affichage (statistiques, état des meubles, notifications), intégration des sprites et des animations du personnage.
+    \item \textbf{Navigation et interactions}~: gestion des pièces et des meubles, implémentation des déplacements du maître et de la logique d'interaction avec les objets de la maison.
+\end{itemize}
+
+Chaque membre a pu contribuer à l'ensemble du projet tout en étant référent sur son domaine principal. Cette répartition a permis une progression parallèle et efficace.
+
+\subsection{Communication}
+
+La communication au sein du groupe a été régulière et fluide. Plusieurs outils ont été utilisés pour faciliter les échanges et le suivi du projet~:
+
+\begin{itemize}
+    \item Un serveur \texttt{Discord} dédié pour les discussions quotidiennes, le partage rapide de documentation et la résolution de problèmes en temps réel.
+    \item Des réunions hebdomadaires en présentiel pour faire le point sur l'avancement, valider les choix d'architecture et répartir les tâches à venir.
+    \item Un dépôt \texttt{Git} centralisé pour versionner le code et suivre l'historique des modifications.
+\end{itemize}
+
+Cette organisation a maintenu une bonne coordination et a permis de respecter les délais impartis.
+
+\subsection{Intégration}
+
+L'intégration des différents modules a été réalisée de manière progressive selon une approche itérative~:
+
+\begin{enumerate}
+    \item Développement individuel sur des branches dédiées.
+    \item Tests unitaires et validation locale des fonctionnalités.
+    \item Fusion régulière sur la branche principale lors des sessions de travail collectif.
+\end{enumerate}
+
+Cette méthode a facilité la détection précoce des incohérences et a garanti la cohérence globale de l'application. L'ensemble des composants a ainsi pu être intégré avec succès pour livrer une simulation fonctionnelle répondant aux exigences initiales.
+

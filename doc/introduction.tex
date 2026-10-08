@@ -1,0 +1,27 @@
+\newpage
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{Contexte du projet}
+
+Ce rapport présente le travail réalisé dans le cadre du projet de Génie Logiciel de deuxième année de Licence Informatique. Le projet porte sur la conception et la mise en œuvre d'une simulation domotique en Java, baptisée \textit{Simulation Domotique}, dans laquelle une maison intelligente prend en charge la vie quotidienne d'un occupant appelé \textit{le maître}.
+
+Le projet a été conçu comme un terrain d'application des concepts vus en cours : programmation orientée objet, patrons de conception, modularisation, tests unitaires et interface graphique avec \texttt{Swing}. Il s'agit également d'un exercice complet de génie logiciel, depuis l'écriture du cahier des charges jusqu'à la livraison d'un logiciel fonctionnel et testé.
+
+\paragraph{} La simulation se déroule à l'intérieur d'une maison composée de plusieurs pièces (chambre, salle de bain, salon, cuisine) reliées par un couloir. Le maître y évolue de façon autonome : il suit une routine journalière différenciée entre semaine et week-end, ses besoins vitaux décroissent au fil du temps, et des imprévus aléatoires peuvent venir bouleverser son emploi du temps. L'ensemble est piloté par une horloge interne et observable depuis une interface graphique dédiée.
+
+\subsection{Objectif du projet}
+
+L'objectif principal est de produire un logiciel de simulation à la fois fidèle à un cahier des charges précis et structuré selon de bonnes pratiques de génie logiciel. Concrètement, le projet doit permettre :
+\begin{itemize}
+\item De simuler la journée d'un occupant à l'intérieur d'une maison connectée décomposée en pièces avec des meubles interactifs.
+\item De faire évoluer en temps réel l'état du maître (énergie, faim, soif, hygiène) et son humeur globale.
+\item De permettre au système domotique de la maison de proposer des actions au maitre selon son état et sa situation.
+\item De faire suivre au maître une routine différenciée entre les jours de semaine et le week-end, tout en intégrant des imprévus aléatoires.
+\item D'offrir une interface graphique permettant de visualiser la maison, le déplacement du maître, l'horloge, les statistiques et les notifications de la maison intélligente.
+\item De garantir la qualité du code par une suite de tests unitaires couvrant chaque composant.
+\end{itemize}
+
+\subsection{Organisation du rapport}
+
+Le rapport est structuré en six sections principales. La section~\ref{sec:cdc} présente la spécification du projet et les fonctionnalités attendues. La section~\ref{sec:concep} décrit la conception et la mise en œuvre du logiciel : architecture globale, classes de données, interface graphique et conception des traitements. La section~\ref{sec:manuel} fournit un manuel d'utilisation à destination de l'utilisateur final. La section~\ref{sec:equipe} détaille le déroulement du projet en équipe. Enfin, la section~\ref{sec:bilan} dresse un bilan du travail réalisé et propose des pistes d'amélioration.

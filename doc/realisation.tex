@@ -1,0 +1,110 @@
+\newpage
+\section{Conception et mise en œuvre}
+\label{sec:concep}
+
+\subsection{Architecture globale du logiciel}
+
+\paragraph{} Dans la figure \ref{fig:archi}, on peut voir un programmeur très occupé par son travail.
+
+\fig{images/architecture.png}{13cm}{10cm}{Architecture du logiciel}{archi}
+
+\subsection{Classes de données}
+
+\paragraph{} Conception et mise en œuvre des classes de données.
+
+Les classes de données du projet modélisent les entités manipulées par la simulation. Elles sont volontairement simples et regroupées dans le paquetage \texttt{engine}.
+
+\paragraph{Carte et blocs} La classe \texttt{Map} représente la grille de la maison et expose des méthodes utilitaires pour tester si un bloc est sur un bord. Chaque \texttt{Block} stocke ses coordonnées (ligne, colonne) et constitue l'unité de base de tous les déplacements.
+
+\paragraph{Pièces} La classe abstraite \texttt{Room} décrit une pièce rectangulaire (ligne / colonne de début et de fin), une porte et une lumière. Quatre classes filles concrétisent ce modèle : \texttt{BedRoom}, \texttt{BathRoom}, \texttt{LivingRoom} et \texttt{Kitchen}. La création passe par une fabrique \texttt{RoomFactory}, ce qui isole la logique d'instanciation.
+
+\paragraph{Meubles} La classe abstraite \texttt{Furniture} factorise un nom, une liste de blocs occupés et un état actif / en veille. Six meubles concrets en héritent : \texttt{Bed}, \texttt{Bathtub}, \texttt{Oven}, \texttt{Sofa}, \texttt{Television} et \texttt{WaterBottle}. À ces meubles s'ajoutent un objet \texttt{Light} pour la lumière des pièces et un \texttt{Switch} qui permet d'agir manuellement sur la lumière du couloir.
+
+\paragraph{Élément mobile} Le maître est représenté par la classe \texttt{Master} qui hérite de la classe abstraite \texttt{MobileElement}. Cette dernière n'expose qu'une position courante (un \texttt{Block}), ce qui prépare une extension future à plusieurs occupants.
+
+\paragraph{État du maître} Le paquetage \texttt{engine.state} contient une classe par besoin (\texttt{Energy}, \texttt{Hunger}, \texttt{Thirst}, \texttt{Hygiene}) et la classe \texttt{MasterState} qui les agrège. Chaque besoin maintient une valeur entre 0 et 100, qui décroît à intervalles réguliers et qui peut atteindre un seuil dit critique. \texttt{MasterState} expose en plus le calcul de l'humeur globale et la détection du besoin le plus critique.
+
+\paragraph{Horloge et événements} La classe \texttt{SimulationClock} maintient l'heure courante (heure, minute, indice du jour) et est avancée d'une minute à chaque tour. Le paquetage \texttt{engine.event} définit la classe \texttt{Imprevu} (un imprévu = code, nom, description) et le \texttt{ImprevuManager} qui maintient le catalogue des imprévus disponibles et applique leurs effets.
+
+Le schéma \ref{fig:donnée} représente un diagramme de classe liant les classes de données entre elles.
+
+\fig{images/classdiagram.png}{17cm}{14cm}{Diagramme de classes}{donnée}
+
+\subsection{IHM Graphique}
+
+\paragraph{} Conception et mise en œuvre de l'IHM graphique de votre projet. 
+
+L'interface est construite avec \texttt{Swing} et organisée en deux fenêtres principales : un lanceur \texttt{LauncherGUI} et la fenêtre de simulation \texttt{MainGUI}. Le découpage en sous-panneaux suit la logique du tableau de bord : à gauche se trouve le rendu de la maison, à droite un bandeau latéral d'informations, et en bas une zone de notifications et de routine.
+
+\paragraph{Lanceur} La fenêtre d'accueil propose trois boutons : \textit{Play} pour lancer la simulation, \textit{Crédits} pour ouvrir une fenêtre listant les auteurs (gérée par \texttt{CreditClass}), et \textit{Quitter} pour fermer l'application. Chaque bouton est associé à un \texttt{ActionListener} dédié.
+
+\fig{images/lanceur.png}{11cm}{10cm}{Lanceur du logiciel}{lanceur}
+
+\paragraph{Fenêtre principale} La fenêtre \texttt{MainGUI} se décompose en plusieurs panneaux :
+\begin{itemize}
+\item \texttt{GameDisplay} : panneau central qui dessine la carte, les pièces, les meubles et le maître à l'aide d'un \texttt{PaintStrategy} et d'un \texttt{SpritePanel} pour les sprites.
+\item \texttt{StatsPanel} : barres d'état des quatre besoins et indicateur d'humeur.
+\item \texttt{FurnitureStatusPanel} : état courant des meubles (en veille / actif, plat ou émission en cours).
+\item Cartes latérales : horloge, indicateur de vitesse, contrôles (Start / Pause, Clear, Speed Up).
+\item Onglets en bas : \textit{Routine} (étape courante, prochaine étape, type de jour, imprévu) et \textit{Consignes} (notifications horodatées de la maison).
+\end{itemize}
+
+\fig{images/principale.png}{11cm}{10cm}{Fenêtre principale}{principale}
+
+\paragraph{Boucle de rendu} La méthode \texttt{run()} de \texttt{MainGUI} maintient deux pas de temps distincts : un pas \og logique \fg\ rythmé par \texttt{GAME\_SPEED} et un pas \og rendu \fg\ rythmé par \texttt{FRAME\_DURATION}. À chaque pas logique, \texttt{manager.nextRound()} est appelé ; à chaque pas rendu, \texttt{refreshDisplay()} met à jour l'horloge, la zone de routine, les notifications et redessine les panneaux.
+
+\subsection{Conception des traitements (processus)}
+
+La logique du jeu est portée principalement par \texttt{MobileElementManager}, qui orchestre à chaque tour la mise à jour de l'horloge, la mise à jour des besoins, l'évaluation de l'imprévu du jour, la mise à jour des lumières, puis la prise de décision et l'action correspondante.
+
+\paragraph{Calcul de l'humeur} L'humeur globale du maître est calculée comme une moyenne pondérée des quatre besoins, après application d'une pénalité pour les valeurs en dessous de 30 (la valeur effective est alors multipliée par $0{,}4$).
+
+\paragraph{} Dans la formule mathématique \ref{eq:mood}, on peut voir le calcul de l'humeur, où $E$, $F$, $S$ et $H$ désignent respectivement les valeurs (éventuellement pénalisées) d'énergie, faim, soif et hygiène.
+
+\begin{equation}
+\textit{Mood} = 0{,}28 \cdot E + 0{,}25 \cdot F + 0{,}30 \cdot S + 0{,}17 \cdot H
+\label{eq:mood}
+\end{equation}
+
+Dans \ref{algo:tour}, on décrit un exemple d'algorithme : la boucle principale exécutée à chaque tour de simulation par \texttt{MobileElementManager}.
+
+\begin{algorithm}
+\caption{Tour de simulation : \textit{nextRound}}
+\label{algo:tour}
+\begin{algorithmic}
+\REQUIRE Une horloge $C$, un état $S$, un gestionnaire d'imprévus $I$, une routine $R$, un \textit{DecisionMaker} $D$ et un maître $M$
+\ENSURE Le maître a effectué une action pour ce tour
+\STATE $C.\textit{nextRound()}$
+\STATE $S.\textit{updateStates()}$
+\STATE $I.\textit{evaluateDailyImprevu}(C.\textit{getDayIndex}())$
+\STATE $\textit{updateLight}()$
+\IF{$M$ est en interaction}
+\STATE \textit{continueInteraction}()
+\RETURN
+\ENDIF
+\STATE $\textit{step} \leftarrow R.\textit{getCurrentStep}()$
+\IF{$\textit{step}$ est obligatoire et prête}
+\STATE \textit{handleMandatoryStep}(\textit{step})
+\RETURN
+\ENDIF
+\IF{$M$ est à la maison}
+\STATE $\textit{decision} \leftarrow D.\textit{decideNextAction}()$
+\IF{$\textit{decision}$ a une cible}
+\IF{$M$ est près de la cible}
+\STATE \textit{startInteraction}(\textit{decision.target})
+\ELSE
+\STATE \textit{moveCloser}(\textit{nextWaypoint})
+\ENDIF
+\ENDIF
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Patrons de conception utilisés} Le projet exploite plusieurs patrons de conception classiques :
+\begin{itemize}
+\item \textit{Builder} pour l'assemblage initial du jeu (\texttt{GameBuilder}).
+\item \textit{Factory} pour la création des pièces et des meubles (\texttt{RoomFactory}, \texttt{FurnitureFactory}).
+\item \textit{Strategy} pour les stratégies de décision (\texttt{DecisionStrategy} et ses trois implémentations).
+\item \textit{Visitor} pour les opérations sur les meubles (\texttt{FurnitureVisitor} avec \texttt{TickVisitor}, \texttt{ResetVisitor}, \texttt{EffectVisitor}, \texttt{IsDoneVisitor}).
+\item \textit{Service} pour découpler les responsabilités lourdes du \texttt{MobileElementManager} (\texttt{MasterNavigationService}, \texttt{FurnitureInteractionService}).
+\end{itemize}

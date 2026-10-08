@@ -1,0 +1,61 @@
+%Définir le format du document: papier, taille de police, type de document, etc.
+%La mise en page du rapport, NE PAS MODIFIER.
+\documentclass[11pt, french]{article}
+
+%%%%%%%%%% Packages externes utilisés %%%%%%%%%%%%%%%%%%%
+\usepackage[french]{babel}
+\selectlanguage{french}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{macro}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+%\usepackage{algorithm2e}
+
+%La mise en page du rapport, NE PAS MODIFIER.
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ left=20mm,
+ right=20mm,
+ top=20mm,
+ bottom=20mm,
+ }
+
+%%%%%%%%% Le corps du document entre begin et end %%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%Page de garde
+\input{titre.tex}
+
+%Génération automatique de la table des matières, de la liste des figures et de la liste des tableaux
+\tableofcontents
+\listoffigures
+\listoftables
+
+%Une section "remerciements" pourrait être intéressante. C'est une section sans numérof (avec un * )
+
+\newpage
+\section* {Remerciements}
+Les auteurs de ce projet voudraient remercier chaleureusement
+\textbf{M. LIU }, encadrant de ce projet, pour
+ses conseils et sa disponibilité tout au long de cette réalisation.
+
+\input{introduction.tex}
+\input{specification.tex}
+\input{realisation.tex}
+\input{manuel.tex}
+\input{deroulement.tex}
+\input{conclusion.tex}
+
+\newpage
+%Références bibliographiques du document
+\bibliographystyle{alpha}
+\bibliography{bibliographies}
+\nocite{*}
+
+\end{document}

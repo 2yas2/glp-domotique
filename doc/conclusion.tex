@@ -1,0 +1,25 @@
+\newpage
+\section{Conclusion et perspectives}
+\label{sec:bilan}
+
+\subsection{Résumé du travail réalisé}
+
+Le projet \textit{La Domotique} a abouti à une simulation domotique fonctionnelle écrite en Java, qui répond à l'ensemble du cahier des charges. La maison se compose de quatre pièces et d'un couloir, et abrite six meubles interactifs avec lesquels le maître interagit selon une logique combinant routine prédéfinie, besoins individuels et imprévus aléatoires.
+
+Sur le plan logiciel, l'application est structurée en paquetages clairement séparés. Le moteur (\texttt{engine}) ne dépend ni de l'interface graphique ni de la couche logique, la logique métier (\texttt{logic}) repose sur des patrons de conception classiques (Builder, Factory, Strategy, Visitor), et l'interface graphique (\texttt{ui}) consomme uniquement une interface (\texttt{MobileInterface}) sans connaître les détails internes du moteur. Cette séparation a permis d'écrire une suite de tests unitaires conséquente (la classe \texttt{DomotiqueTestSuite} regroupe une vingtaine de classes de tests) qui valide la plupart des composants critiques.
+
+Au-delà du fonctionnement nominal, le projet intègre des éléments d'agrément : choix d'un plat ou d'une émission selon l'humeur, allumage automatique des lumières en fonction de la pièce occupée, notifications horodatées, et indicateurs visuels en temps réel pour l'utilisateur.
+
+\subsection{Améliorations possibles du projet}
+
+Plusieurs pistes d'amélioration restent ouvertes pour un futur travail.
+
+\paragraph{Navigation plus réaliste} Le déplacement actuel utilise une heuristique simple par décomposition colonne / ligne et points de passage par les portes. Une implémentation d'un véritable algorithme de plus court chemin permettrait de gérer des plans de maison plus irréguliers ou d'introduire des obstacles supplémentaires.
+
+\paragraph{Plusieurs occupants} L'architecture (classe abstraite \texttt{MobileElement}) prépare déjà l'introduction de plusieurs occupants. Il resterait à étendre le \texttt{MobileElementManager} pour gérer un ensemble de maîtres et à arbitrer les conflits d'accès aux meubles.
+
+\paragraph{Catalogue d'imprévus extensible} Le catalogue d'imprévus est aujourd'hui codé en dur dans \texttt{ImprevuManager}. Le rendre configurable (par exemple via un fichier de description) permettrait à l'utilisateur d'ajouter ses propres imprévus sans recompiler le projet.
+
+\paragraph{Persistance} La simulation repart actuellement à zéro à chaque lancement. La possibilité de sauvegarder et de recharger un état complet (heure, position, besoins, étape de routine) ouvrirait la voie à des sessions plus longues et à des scénarios pédagogiques.
+
+\paragraph{Améliorations de l'IHM} L'interface pourrait s'enrichir d'animations plus poussées sur les sprites, d'un mode plein écran et d'une internationalisation complète des textes affichés (actuellement partagés entre français et anglais selon les modules).
