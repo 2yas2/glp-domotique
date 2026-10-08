@@ -43,3 +43,7 @@ Simulation en cours :
 ## Ce que j'ai fait
 
 Projet de groupe de L2 réalisé avec Agnies Sadli et Mariam Traore. J'ai réalisé la grande majorité du code.
+
+## Sprites
+
+Les sprites utilisés ne sont pas de nous.
