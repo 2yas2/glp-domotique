@@ -42,8 +42,4 @@ Simulation en cours :
 
 ## Ce que j'ai fait
 
-J'ai réalisé la grande majorité du projet. Certaines parties ont été confiées à mes coéquipiers : [À COMPLÉTER : lesquelles].
-
-## Sprites
-
-[À COMPLÉTER : origine et licence des images du dossier `src/sprites/`]
+Projet de groupe de L2 réalisé avec Agnies Sadli et Mariam Traore. J'ai réalisé la grande majorité du code.
